@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="CYBER FRAUD 4.0 – Mô phỏng hành vi trước các tình huống lừa đảo trực tuyến." />
+    <title>LƯỚI ẢO - BẪY THẬT</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <main class="app-shell">
+        <!-- Welcome Screen -->
+        <section id="welcome-screen" class="screen active" aria-labelledby="welcome-title">
+            <div class="welcome-card">
+                <div class="card-top-bar">
+                    <button id="sound-btn-welcome" class="sound-toggle-btn" aria-label="Bật/Tắt âm thanh"
+                        title="Âm thanh hiệu ứng">
+                        <i class="fa-solid fa-volume-high"></i>
+                    </button>
+                </div>
+                <div class="logo-mark">
+                    <img src="assets/logo.png" alt="Logo Trường THPT Lê Hồng Phong" class="logo-img" />
+                </div>
+                <p class="eyebrow">DỰ ÁN KHOA HỌC KỸ THUẬT</p>
+                <h1 id="welcome-title">LƯỚI ẢO - BẪY THẬT</h1>
+                <!-- <p class="subtitle">LỪA ĐẢO TRÊN KHÔNG GIAN MẠNG </p> -->
+                <p class="subtitle">TRƯỜNG THPT LÊ HỒNG PHONG - 2026 </p>
+
+                <div class="warning-note">
+                    <span class="warning-icon"><i class="fa-solid fa-triangle-exclamation"></i></span>
+                    <p>
+                        Đây là trải nghiệm mô phỏng tương tác thực tế nhằm quan sát và đánh giá phản xạ tâm lý của bạn
+                        trước các dấu hiệu lừa đảo trực tuyến tinh vi.
+                    </p>
+                </div>
+
+                <div class="survey-box">
+                    <h2><i class="fa-solid fa-clipboard-question"></i> Khảo sát nhanh</h2>
+                    <p>Bạn tự đánh giá mình có dễ bị lừa trên mạng không?</p>
+
+                    <div class="survey-options" id="survey-options">
+                        <button class="survey-btn" data-answer="Không">
+                            <span class="btn-emoji">❌</span>
+                            <span class="btn-text">Không</span>
+                            <span class="check-mark"><i class="fa-solid fa-circle-check"></i></span>
+                        </button>
+                        <button class="survey-btn" data-answer="Có thể">
+                            <span class="btn-emoji">🤔</span>
+                            <span class="btn-text">Có thể</span>
+                            <span class="check-mark"><i class="fa-solid fa-circle-check"></i></span>
+                        </button>
+                        <button class="survey-btn" data-answer="Chắc chắn không">
+                            <span class="btn-emoji">💪</span>
+                            <span class="btn-text">Chắc chắn không</span>
+                            <span class="check-mark"><i class="fa-solid fa-circle-check"></i></span>
+                        </button>
+                    </div>
+                </div>
+
+                <button id="start-btn" class="primary-btn" disabled>
+                    BẮT ĐẦU TRẢI NGHIỆM <i class="fa-solid fa-arrow-right"></i>
+                </button>
+
+                <p class="privacy-text">
+                    <i class="fa-solid fa-lock"></i> Hoàn toàn ẩn danh. Không thu thập thông tin cá nhân. Kết quả chỉ
+                    phục vụ nghiên cứu khoa học.
+                </p>
+            </div>
+        </section>
+
+        <!-- Chat Simulation Screen -->
+        <section id="chat-screen" class="screen" aria-label="Mô phỏng trò chuyện">
+            <div class="phone-frame">
+                <!-- Phone Top Status Bar -->
+                <div class="phone-status-bar">
+                    <span id="phone-clock">12:30</span>
+                    <div class="phone-notch-pill"></div>
+                    <div class="phone-icons">
+                        <i class="fa-solid fa-signal"></i>
+                        <i class="fa-solid fa-wifi"></i>
+                        <i class="fa-solid fa-battery-full"></i>
+                    </div>
+                </div>
+
+                <!-- Chat Header -->
+                <header class="chat-header">
+                    <div class="header-left">
+                        <button id="exit-btn" class="icon-btn back-btn" aria-label="Quay lại trang chủ"
+                            title="Quay lại">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <div class="chat-profile">
+                            <div class="avatar avatar-main">
+                                <span>NA</span>
+                                <span class="avatar-badge"><i class="fa-solid fa-user-secret"></i></span>
+                            </div>
+                            <div class="profile-info">
+                                <div class="profile-name-row">
+                                    <h2 id="chat-name">Ngọc Anh</h2>
+                                    <span class="danger-tag"><i class="fa-solid fa-circle-exclamation"></i> Chưa xác
+                                        minh</span>
+                                </div>
+                                <p><span class="online-dot"></span> Đang hoạt động</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="header-actions">
+                        <button id="undo-btn" class="icon-btn" aria-label="Quay lại bước trước"
+                            title="Quay lại bước trước">
+                            <i class="fa-solid fa-rotate-left"></i>
+                        </button>
+                        <button id="sound-btn-chat" class="icon-btn" aria-label="Bật/Tắt âm thanh"
+                            title="Âm thanh hiệu ứng">
+                            <i class="fa-solid fa-volume-high"></i>
+                        </button>
+                    </div>
+                </header>
+
+                <!-- Progress Header -->
+                <div id="progress-wrap" class="progress-wrap">
+                    <div class="progress-label">
+                        <span id="step-label"><i class="fa-regular fa-compass"></i> Tình huống 1/8</span>
+                        <span id="risk-mini" class="risk-badge-mini">Điểm rủi ro: 0</span>
+                    </div>
+                    <div class="progress-track">
+                        <div id="progress-bar" class="progress-bar"></div>
+                    </div>
+                </div>
+
+                <!-- Chat Message Stream -->
+                <div id="chat-history" class="chat-history" aria-live="polite"></div>
+
+                <!-- Typing indicator -->
+                <div id="typing-indicator" class="typing-indicator hidden">
+                    <div class="avatar avatar-small">NA</div>
+                    <div class="typing-bubble">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+
+                <!-- Action Panel / Options Container -->
+                <div id="action-panel" class="action-panel">
+                    <p class="action-title"><i class="fa-regular fa-hand-pointer"></i> Bạn sẽ phản ứng thế nào?</p>
+                    <div id="options-container" class="options-container"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Report Screen -->
+        <section id="report-screen" class="screen" aria-labelledby="report-title">
+            <div class="report-card">
+                <div class="report-header-badge">
+                    <i class="fa-solid fa-microscope"></i> HỆ THỐNG ĐÃ PHÂN TÍCH HÀNH VI
+                </div>
+                <h1 id="report-title">BÁO CÁO CẢNH GIÁC SỐ</h1>
+                <p class="report-subtitle">Đánh giá khoảng cách giữa kiến thức lý thuyết và phản ứng thực tế</p>
+
+                <div id="risk-banner" class="risk-banner"></div>
+
+                <div class="report-grid">
+                    <article class="report-box score-box">
+                        <p class="report-label"><i class="fa-solid fa-gauge-high"></i> Tổng điểm rủi ro</p>
+                        <p class="risk-score">
+                            <span id="final-risk-score">0</span>/<span id="max-risk-score">24</span>
+                        </p>
+                        <p id="score-description" class="muted-text"></p>
+                    </article>
+
+                    <article class="report-box">
+                        <p class="report-label"><i class="fa-solid fa-lightbulb"></i> Niềm tin ban đầu</p>
+                        <p id="belief-result" class="belief-result"></p>
+                        <p class="muted-text">Câu trả lời khảo sát trước khi làm bài</p>
+                    </article>
+                </div>
+
+                <section class="analysis-block">
+                    <h2><i class="fa-solid fa-magnifying-glass-chart"></i> Chi tiết các phản ứng của bạn</h2>
+                    <div id="behavior-analysis" class="analysis-list"></div>
+                </section>
+
+                <section class="analysis-block research-block">
+                    <h2><i class="fa-solid fa-brain"></i> Kết luận nghiên cứu tâm lý hành vi</h2>
+                    <p id="research-conclusion"></p>
+                </section>
+
+                <section class="safety-block">
+                    <h2><i class="fa-solid fa-shield-virus"></i> 4 Nguyên tắc vàng tự bảo vệ</h2>
+                    <ul>
+                        <li><strong>Không cung cấp:</strong> Mã OTP, mật khẩu, CCCD hoặc ảnh giấy tờ cho bất kỳ ai.</li>
+                        <li><strong>Xác minh độc lập:</strong> Không chuyển tiền khi bị giục giã hoặc mượn tài khoản
+                            ngân hàng.</li>
+                        <li><strong>Không bấm link lạ:</strong> Đặc biệt là link rút gọn (bit.ly, .top) hoặc bình chọn
+                            ảo.</li>
+                        <li><strong>Chủ động chặn & báo cáo:</strong> Khi đối tượng ép giữ bí mật hoặc tạo áp lực cảm
+                            xúc.</li>
+                    </ul>
+                </section>
+
+                <!-- Tính năng 4: Cẩm nang 15 Phút Vàng -->
+                <section class="emergency-block">
+                    <h2><i class="fa-solid fa-stopwatch-20"></i> CẨM NANG 15 PHÚT VÀNG KHI LỠ SẬP BẪY</h2>
+                    <p class="emergency-intro">Nếu bạn hoặc người thân vừa bấm link lạ, nhập mật khẩu/OTP hoặc chuyển
+                        tiền, hãy thực hiện ngay quy trình sau để hạn chế tối đa thiệt hại:</p>
+
+                    <div class="timeline-steps">
+                        <div class="step-card">
+                            <div class="step-badge">01</div>
+                            <div class="step-body">
+                                <h4>Phút 0 - 3: Khóa thẻ & Đóng tài khoản khẩn cấp</h4>
+                                <p>Mở app ngân hàng bấm <strong>"Khóa thẻ / Tạm khóa tài khoản"</strong> ngay lập tức,
+                                    hoặc gọi tổng đài hotline ngân hàng yêu cầu phong tỏa các giao dịch trực tuyến.</p>
+                            </div>
+                        </div>
+
+                        <div class="step-card">
+                            <div class="step-badge">02</div>
+                            <div class="step-body">
+                                <h4>Phút 3 - 5: Bật chế độ máy bay & Tắt Wi-Fi</h4>
+                                <p>Nếu bạn vừa cài đặt file APK lạ hoặc app theo hướng dẫn của đối tượng, ngắt kết nối
+                                    mạng ngay để ngăn mã độc gián điệp gửi dữ liệu hoặc chiếm quyền điều khiển.</p>
+                            </div>
+                        </div>
+
+                        <div class="step-card">
+                            <div class="step-badge">03</div>
+                            <div class="step-body">
+                                <h4>Phút 5 - 10: Sao lưu bằng chứng điện tử</h4>
+                                <p>Chụp ảnh màn hình toàn bộ tin nhắn, số tài khoản nhận tiền, biên lai chuyển khoản và
+                                    số điện thoại gọi đến. <em>Tuyệt đối không xóa tin nhắn hoặc thu hồi đoạn chat</em>.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="step-card">
+                            <div class="step-badge">04</div>
+                            <div class="step-body">
+                                <h4>Phút 10 - 15: Trình báo & Đổi mật khẩu</h4>
+                                <p>Đổi mật khẩu Email, tài khoản mạng xã hội. Trình báo ngay cho Công an địa phương và
+                                    gửi cảnh báo lên Cổng An toàn thông tin quốc gia.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tính năng 4: Đường dây nóng khẩn cấp 24/7 -->
+                <section class="hotline-block">
+                    <h2><i class="fa-solid fa-phone-volume"></i> ĐƯỜNG DÂY NÓNG CỨU NGUY KHẨN CẤP 24/7</h2>
+                    <div class="hotline-grid">
+                        <a href="tel:18001567" class="hotline-card">
+                            <div class="hotline-icon"><i class="fa-solid fa-building-shield"></i></div>
+                            <div class="hotline-details">
+                                <span class="hotline-label">Cục An Toàn Thông Tin (NCSC)</span>
+                                <strong class="hotline-number">1800 1567</strong>
+                                <span class="hotline-sub">Tư vấn an toàn mạng miễn cước</span>
+                            </div>
+                        </a>
+
+                        <a href="tel:0692348560" class="hotline-card">
+                            <div class="hotline-icon"><i class="fa-solid fa-handcuffs"></i></div>
+                            <div class="hotline-details">
+                                <span class="hotline-label">Cục Cảnh Sát Hình Sự (C02)</span>
+                                <strong class="hotline-number">069 234 8560</strong>
+                                <span class="hotline-sub">Trực ban hình sự Bộ Công An</span>
+                            </div>
+                        </a>
+
+                        <a href="https://canhbao.ncsc.gov.vn" target="_blank" rel="noopener noreferrer"
+                            class="hotline-card">
+                            <div class="hotline-icon"><i class="fa-solid fa-globe"></i></div>
+                            <div class="hotline-details">
+                                <span class="hotline-label">Cổng Cảnh Báo An Toàn Số</span>
+                                <strong class="hotline-number">canhbao.ncsc.gov.vn</strong>
+                                <span class="hotline-sub">Tiếp nhận báo cáo lừa đảo online</span>
+                            </div>
+                        </a>
+                    </div>
+                </section>
+
+                <div class="report-actions">
+                    <button id="restart-btn" class="primary-btn">
+                        <i class="fa-solid fa-rotate-right"></i> THỬ LẠI TỪ ĐẦU
+                    </button>
+                    <button id="home-btn" class="secondary-btn">
+                        <i class="fa-solid fa-house"></i> VỀ TRANG CHỦ
+                    </button>
+                    <button id="print-btn" class="secondary-btn">
+                        <i class="fa-solid fa-print"></i> IN BÁO CÁO
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Xác Nhận Thoát (In-App Dialog mượt mà) -->
+    <div id="exit-modal" class="modal-backdrop hidden">
+        <div class="modal-dialog">
+            <div class="modal-icon warning">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3>Kết thúc trải nghiệm?</h3>
+            <p>Nếu quay lại trang chủ lúc này, kết quả của các tình huống đã làm sẽ bị hủy bỏ.</p>
+            <div class="modal-actions">
+                <button id="modal-cancel-btn" class="modal-btn secondary">Tiếp tục làm</button>
+                <button id="modal-confirm-btn" class="modal-btn danger">Quay lại trang chủ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="data/scenarios.js"></script>
+    <script src="scripts.js"></script>
+</body>
+
+</html>
