@@ -67,14 +67,22 @@
                     </div>
                 </div>
 
-                <button id="start-btn" class="primary-btn" disabled>
-                    BẮT ĐẦU TRẢI NGHIỆM <i class="fa-solid fa-arrow-right"></i>
-                </button>
+                <div class="welcome-action-group">
+                    <button id="start-btn" class="primary-btn" disabled>
+                        <i class="fa-solid fa-comments"></i> Chat mô phỏng <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                    <button id="launch-quiz-btn" class="secondary-btn quiz-launcher-cta" type="button">
+                        <i class="fa-solid fa-scale-balanced"></i> Right or Wrong?
+                    </button>
+                </div>
 
                 <p class="privacy-text">
-                    <i class="fa-solid fa-lock"></i> Hoàn toàn ẩn danh. Không thu thập thông tin cá nhân. Kết quả chỉ
+                    <i class="fa-solid fa-lock"></i> Hoàn toàn ẩn danh. Kết quả chỉ
                     phục vụ nghiên cứu khoa học.
                 </p>
+                <div class="credits-footer">
+                    <p style="font-size: 13px;">Developed by <strong>Ted Nguyen</strong></p>
+                </div>
             </div>
         </section>
 
@@ -101,12 +109,12 @@
                         </button>
                         <div class="chat-profile">
                             <div class="avatar avatar-main">
-                                <span>NA</span>
+                                <img src="assets/avatar.jpg" alt="Avatar Tài khoản ẩn danh" class="avatar-img" />
                                 <span class="avatar-badge"><i class="fa-solid fa-user-secret"></i></span>
                             </div>
                             <div class="profile-info">
                                 <div class="profile-name-row">
-                                    <h2 id="chat-name">Ngọc Anh</h2>
+                                    <h2 id="chat-name">Tài khoản ẩn danh</h2>
                                     <span class="danger-tag"><i class="fa-solid fa-circle-exclamation"></i> Chưa xác
                                         minh</span>
                                 </div>
@@ -143,7 +151,9 @@
 
                 <!-- Typing indicator -->
                 <div id="typing-indicator" class="typing-indicator hidden">
-                    <div class="avatar avatar-small">NA</div>
+                    <div class="avatar avatar-small">
+                        <img src="assets/avatar.jpg" alt="Avatar" class="avatar-img" />
+                    </div>
                     <div class="typing-bubble">
                         <span></span><span></span><span></span>
                     </div>
@@ -192,6 +202,40 @@
                 <section class="analysis-block research-block">
                     <h2><i class="fa-solid fa-brain"></i> Kết luận nghiên cứu tâm lý hành vi</h2>
                     <p id="research-conclusion"></p>
+                </section>
+
+                <!-- THÔNG ĐIỆP CẢNH TỈNH: BẠN CÓ NHẬN RA CÁI BẪY? -->
+                <div class="trap-awakening-banner">
+                    <div class="trap-awakening-badge">
+                        <i class="fa-solid fa-bullseye"></i> THÔNG ĐIỆP ĐẶC BIỆT
+                    </div>
+                    <h2 class="trap-awakening-title">BẠN CÓ NHẬN RA CÁI BẪY?</h2>
+                    <p class="trap-awakening-lead">
+                        Kẻ xấu thường không bắt đầu bằng một lời đe dọa.<br>
+                        Chúng có thể bắt đầu bằng một lời chào, một điểm chung và một cuộc trò chuyện tưởng như vô hại.
+                    </p>
+                    <div class="trap-awakening-highlight">
+                        <i class="fa-solid fa-triangle-exclamation"></i> ĐỪNG ĐỂ SỰ TIN TƯỞNG BIẾN THÀNH CÁI BẪY.
+                    </div>
+                </div>
+
+                <!-- CÂU GÀI ĐÚNG / SAI -->
+                <section class="trap-quiz-block">
+                    <div class="trap-quiz-header">
+                        <div>
+                            <h2><i class="fa-solid fa-scale-balanced"></i> CÂU GÀI ĐÚNG / SAI</h2>
+                            <p class="trap-quiz-subtitle">Thử tài nhận diện 16 cái bẫy tư duy thường gặp trên không gian
+                                mạng:</p>
+                        </div>
+                        <button id="toggle-traps-btn" class="secondary-btn"
+                            style="padding: 10px 18px; font-size: 0.88rem;">
+                            <i class="fa-solid fa-eye"></i> Hiện toàn bộ đáp án
+                        </button>
+                    </div>
+
+                    <div class="trap-quiz-grid" id="trap-quiz-grid">
+                        <!-- Render 16 câu gài bằng JavaScript -->
+                    </div>
                 </section>
 
                 <section class="safety-block">
@@ -296,6 +340,73 @@
                     </button>
                     <button id="print-btn" class="secondary-btn">
                         <i class="fa-solid fa-print"></i> IN BÁO CÁO
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dedicated Right or Wrong? Test Screen -->
+        <section id="quiz-screen" class="screen" aria-label="Bài test Right or Wrong">
+            <div class="quiz-container">
+                <!-- Top Nav Bar -->
+                <div class="quiz-nav-bar">
+                    <button id="quiz-back-home-btn" class="secondary-btn" type="button" style="padding: 10px 18px;">
+                        <i class="fa-solid fa-house"></i> Về trang chủ
+                    </button>
+                    <div class="quiz-score-pill">
+                        <i class="fa-solid fa-award" style="color: #f59e0b;"></i>
+                        <span>Điểm số:</span>
+                        <strong id="quiz-score-display">0 / 16</strong>
+                    </div>
+                    <button id="quiz-reset-btn" class="secondary-btn" type="button" style="padding: 10px 18px;">
+                        <i class="fa-solid fa-rotate-left"></i> Làm lại
+                    </button>
+                </div>
+
+                <!-- Awakening Banner -->
+                <div class="trap-awakening-banner">
+                    <div class="trap-awakening-badge">
+                        <i class="fa-solid fa-bullseye"></i> THÔNG ĐIỆP CẢNH TỈNH
+                    </div>
+                    <h2 class="trap-awakening-title">BẠN CÓ NHẬN RA CÁI BẪY?</h2>
+                    <p class="trap-awakening-lead">
+                        Kẻ xấu thường không bắt đầu bằng một lời đe dọa.<br>
+                        Chúng có thể bắt đầu bằng một lời chào, một điểm chung và một cuộc trò chuyện tưởng như vô hại.
+                    </p>
+                    <div class="trap-awakening-highlight">
+                        <i class="fa-solid fa-triangle-exclamation"></i> ĐỪNG ĐỂ SỰ TIN TƯỞNG BIẾN THÀNH CÁI BẪY.
+                    </div>
+                </div>
+
+                <!-- Quiz Questions Block -->
+                <div class="trap-quiz-block">
+                    <div class="trap-quiz-header">
+                        <div>
+                            <h2><i class="fa-solid fa-scale-balanced"></i> BÀI TEST: RIGHT OR WRONG?</h2>
+                            <p class="trap-quiz-subtitle">Thử tài nhận diện 16 ngộ nhận và cái bẫy tư duy nguy hiểm nhất
+                                trên không gian mạng:</p>
+                        </div>
+                        <button id="toggle-quiz-answers-btn" class="secondary-btn"
+                            style="padding: 10px 18px; font-size: 0.88rem;">
+                            <i class="fa-solid fa-eye"></i> Hiện toàn bộ đáp án
+                        </button>
+                    </div>
+
+                    <div class="trap-quiz-grid" id="quiz-screen-grid">
+                        <!-- Render 16 câu gài -->
+                    </div>
+                </div>
+
+                <!-- Bottom Action Box -->
+                <div class="quiz-footer-card">
+                    <div class="quiz-footer-text">
+                        <h3><i class="fa-solid fa-shield-halved"></i> Đã hoàn thành bài test nhận diện?</h3>
+                        <p>Hãy trải nghiệm thực tế với 10 tình huống tin nhắn giả lập để rèn luyện phản xạ đối phó kẻ
+                            xấu.</p>
+                    </div>
+                    <button id="quiz-switch-chat-btn" class="primary-btn" type="button">
+                        <i class="fa-solid fa-comments"></i> BẮT ĐẦU MÔ PHỎNG CHAT (10 CÂU) <i
+                            class="fa-solid fa-arrow-right"></i>
                     </button>
                 </div>
             </div>

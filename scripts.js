@@ -7,6 +7,15 @@
 const welcomeScreen = document.getElementById("welcome-screen");
 const chatScreen = document.getElementById("chat-screen");
 const reportScreen = document.getElementById("report-screen");
+const quizScreen = document.getElementById("quiz-screen");
+
+const launchQuizBtn = document.getElementById("launch-quiz-btn");
+const quizBackHomeBtn = document.getElementById("quiz-back-home-btn");
+const quizScoreDisplay = document.getElementById("quiz-score-display");
+const quizResetBtn = document.getElementById("quiz-reset-btn");
+const toggleQuizAnswersBtn = document.getElementById("toggle-quiz-answers-btn");
+const quizScreenGrid = document.getElementById("quiz-screen-grid");
+const quizSwitchChatBtn = document.getElementById("quiz-switch-chat-btn");
 
 const surveyButtons = document.querySelectorAll(".survey-btn");
 const startButton = document.getElementById("start-btn");
@@ -40,6 +49,8 @@ const scoreDescription = document.getElementById("score-description");
 const beliefResult = document.getElementById("belief-result");
 const behaviorAnalysis = document.getElementById("behavior-analysis");
 const researchConclusion = document.getElementById("research-conclusion");
+const trapQuizGrid = document.getElementById("trap-quiz-grid");
+const toggleTrapsBtn = document.getElementById("toggle-traps-btn");
 
 // State Management
 const state = {
@@ -235,10 +246,10 @@ function closeExitModal() {
 }
 
 function showScreen(screen) {
-    [welcomeScreen, chatScreen, reportScreen].forEach((item) => {
-        item.classList.remove("active");
+    [welcomeScreen, chatScreen, reportScreen, quizScreen].forEach((item) => {
+        if (item) item.classList.remove("active");
     });
-    screen.classList.add("active");
+    if (screen) screen.classList.add("active");
 }
 
 // ==========================================================================
@@ -415,7 +426,7 @@ function addMessage(type, text, levelClass = "") {
     if (type === "stranger") {
         const avatar = document.createElement("div");
         avatar.className = "avatar avatar-small";
-        avatar.textContent = "NA";
+        avatar.innerHTML = `<img src="assets/avatar.jpg" alt="Avatar" class="avatar-img" />`;
         row.appendChild(avatar);
     }
 
@@ -544,6 +555,7 @@ function generateReport() {
     });
 
     researchConclusion.textContent = buildResearchConclusion(riskPercent, riskyChoices.length);
+    renderTrapQuiz();
 }
 
 function appendAnalysisItem(type, title, content, tactic = "", scammerThought = "") {
@@ -642,4 +654,303 @@ function updatePhoneClock() {
 
 function wait(milliseconds) {
     return new Promise((resolve) => setTimeout(resolve, milliseconds));
+}
+
+// ==========================================================================
+// CÂU GÀI ĐÚNG / SAI (16 CÂU NHẬN DIỆN BẪY TƯ DUY TÂM LÝ)
+// ==========================================================================
+
+// --- Màn hình bài test độc lập: Right or Wrong? ---
+const standaloneQuizState = {
+    answered: 0,
+    correct: 0,
+    revealed: false
+};
+
+function renderStandaloneQuiz() {
+    if (!quizScreenGrid || typeof TRAP_STATEMENTS === "undefined") return;
+    quizScreenGrid.innerHTML = "";
+    standaloneQuizState.answered = 0;
+    standaloneQuizState.correct = 0;
+    standaloneQuizState.revealed = false;
+    updateStandaloneScoreDisplay();
+
+    TRAP_STATEMENTS.forEach((item) => {
+        const card = createTrapCard(item, "standalone");
+        quizScreenGrid.appendChild(card);
+    });
+
+    if (toggleQuizAnswersBtn) {
+        toggleQuizAnswersBtn.innerHTML = `<i class="fa-solid fa-eye"></i> Hiện toàn bộ đáp án`;
+    }
+}
+
+function updateStandaloneScoreDisplay() {
+    if (quizScoreDisplay) {
+        quizScoreDisplay.textContent = `${standaloneQuizState.correct} / ${TRAP_STATEMENTS.length}`;
+    }
+}
+
+function resetStandaloneQuiz() {
+    SoundEngine.playClick();
+    renderStandaloneQuiz();
+}
+
+function toggleAllStandaloneAnswers() {
+    if (typeof TRAP_STATEMENTS === "undefined") return;
+    SoundEngine.playClick();
+    standaloneQuizState.revealed = !standaloneQuizState.revealed;
+
+    TRAP_STATEMENTS.forEach((item) => {
+        const card = document.getElementById(`standalone-card-${item.id}`);
+        if (!card) return;
+
+        const btnTrue = card.querySelector('.btn-true');
+        const btnFalse = card.querySelector('.btn-false');
+        const expBox = card.querySelector('.trap-explanation-box');
+        const statusSpan = card.querySelector('.trap-user-status');
+
+        if (standaloneQuizState.revealed) {
+            if (btnTrue && btnFalse) {
+                btnTrue.disabled = true;
+                btnFalse.disabled = true;
+                if (item.correctAnswer) {
+                    btnTrue.classList.add("selected-correct");
+                } else {
+                    btnFalse.classList.add("selected-correct");
+                }
+            }
+            if (statusSpan && !statusSpan.innerHTML) {
+                statusSpan.innerHTML = `<span style="color: #0369a1;"><i class="fa-solid fa-lightbulb"></i> Đáp án chuẩn</span>`;
+            }
+            if (expBox) expBox.style.display = "block";
+        } else {
+            if (btnTrue && btnFalse) {
+                btnTrue.disabled = false;
+                btnFalse.disabled = false;
+                btnTrue.className = "trap-btn btn-true";
+                btnFalse.className = "trap-btn btn-false";
+            }
+            if (statusSpan) statusSpan.innerHTML = "";
+            if (expBox) expBox.style.display = "none";
+        }
+    });
+
+    if (toggleQuizAnswersBtn) {
+        toggleQuizAnswersBtn.innerHTML = standaloneQuizState.revealed
+            ? `<i class="fa-solid fa-rotate-left"></i> Đặt lại câu gài`
+            : `<i class="fa-solid fa-eye"></i> Hiện toàn bộ đáp án`;
+    }
+}
+
+// --- Tạo Component Card cho câu gài Đúng / Sai ---
+function createTrapCard(item, prefix) {
+    const card = document.createElement("div");
+    card.className = "trap-card";
+    card.id = `${prefix}-card-${item.id}`;
+
+    const isSpecial = Boolean(item.specialMessage);
+
+    card.innerHTML = `
+        <div>
+            <div class="trap-card-header">
+                <span class="trap-num-badge">#${item.id}</span>
+                <p class="trap-statement">“${item.statement}”</p>
+            </div>
+
+            <div class="trap-action-row">
+                <button type="button" class="trap-btn btn-true" data-id="${item.id}">
+                    <i class="fa-solid fa-check"></i> ĐÚNG
+                </button>
+                <button type="button" class="trap-btn btn-false" data-id="${item.id}">
+                    <i class="fa-solid fa-xmark"></i> SAI
+                </button>
+            </div>
+        </div>
+
+        <div class="trap-explanation-box" style="display: none;">
+            <div class="trap-result-header">
+                <span class="trap-user-status"></span>
+                <span class="trap-official-badge ${item.correctAnswer ? 'true' : 'false'}">
+                    Đáp án: ${item.correctAnswer ? '✅ ĐÚNG' : '❌ SAI'}
+                </span>
+            </div>
+            <p class="trap-explanation-text">${item.explanation}</p>
+            ${isSpecial ? `
+            <div class="trap-special-callout">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <div>
+                    <strong>Thông điệp:</strong> “${item.specialMessage}”
+                </div>
+            </div>` : ''}
+        </div>
+    `;
+
+    const btnTrue = card.querySelector('.btn-true');
+    const btnFalse = card.querySelector('.btn-false');
+    const expBox = card.querySelector('.trap-explanation-box');
+    const statusSpan = card.querySelector('.trap-user-status');
+
+    function onAnswer(userChoice) {
+        SoundEngine.playClick();
+        const isCorrect = (userChoice === item.correctAnswer);
+
+        if (isCorrect) {
+            SoundEngine.playSafeChime();
+        } else {
+            SoundEngine.playDangerBuzz();
+        }
+
+        btnTrue.disabled = true;
+        btnFalse.disabled = true;
+
+        if (userChoice === true) {
+            if (isCorrect) {
+                btnTrue.classList.add("selected-correct");
+            } else {
+                btnTrue.classList.add("selected-wrong");
+                btnFalse.classList.add("official-answer");
+            }
+        } else {
+            if (isCorrect) {
+                btnFalse.classList.add("selected-correct");
+            } else {
+                btnFalse.classList.add("selected-wrong");
+                btnTrue.classList.add("official-answer");
+            }
+        }
+
+        if (statusSpan) {
+            statusSpan.innerHTML = isCorrect
+                ? `<span style="color: #15803d;"><i class="fa-solid fa-circle-check"></i> Chính xác!</span>`
+                : `<span style="color: #b91c1c;"><i class="fa-solid fa-circle-xmark"></i> Chưa chính xác!</span>`;
+        }
+
+        if (expBox) expBox.style.display = "block";
+
+        if (prefix === "standalone") {
+            standaloneQuizState.answered += 1;
+            if (isCorrect) standaloneQuizState.correct += 1;
+            updateStandaloneScoreDisplay();
+        }
+    }
+
+    btnTrue.addEventListener("click", () => onAnswer(true));
+    btnFalse.addEventListener("click", () => onAnswer(false));
+
+    return card;
+}
+
+// --- Render trên Màn hình Báo cáo (Report Screen) ---
+let reportTrapsRevealed = false;
+
+function renderTrapQuiz() {
+    if (!trapQuizGrid || typeof TRAP_STATEMENTS === "undefined") return;
+    trapQuizGrid.innerHTML = "";
+
+    TRAP_STATEMENTS.forEach((item) => {
+        const card = createTrapCard(item, "report");
+        trapQuizGrid.appendChild(card);
+    });
+
+    reportTrapsRevealed = false;
+    if (toggleTrapsBtn) {
+        toggleTrapsBtn.innerHTML = `<i class="fa-solid fa-eye"></i> Hiện toàn bộ đáp án`;
+    }
+}
+
+function toggleAllReportAnswers() {
+    if (typeof TRAP_STATEMENTS === "undefined") return;
+    SoundEngine.playClick();
+    reportTrapsRevealed = !reportTrapsRevealed;
+
+    TRAP_STATEMENTS.forEach((item) => {
+        const card = document.getElementById(`report-card-${item.id}`);
+        if (!card) return;
+
+        const btnTrue = card.querySelector('.btn-true');
+        const btnFalse = card.querySelector('.btn-false');
+        const expBox = card.querySelector('.trap-explanation-box');
+        const statusSpan = card.querySelector('.trap-user-status');
+
+        if (reportTrapsRevealed) {
+            if (btnTrue && btnFalse) {
+                btnTrue.disabled = true;
+                btnFalse.disabled = true;
+                if (item.correctAnswer) {
+                    btnTrue.classList.add("selected-correct");
+                } else {
+                    btnFalse.classList.add("selected-correct");
+                }
+            }
+            if (statusSpan && !statusSpan.innerHTML) {
+                statusSpan.innerHTML = `<span style="color: #0369a1;"><i class="fa-solid fa-lightbulb"></i> Đáp án chuẩn</span>`;
+            }
+            if (expBox) expBox.style.display = "block";
+        } else {
+            if (btnTrue && btnFalse) {
+                btnTrue.disabled = false;
+                btnFalse.disabled = false;
+                btnTrue.className = "trap-btn btn-true";
+                btnFalse.className = "trap-btn btn-false";
+            }
+            if (statusSpan) statusSpan.innerHTML = "";
+            if (expBox) expBox.style.display = "none";
+        }
+    });
+
+    if (toggleTrapsBtn) {
+        toggleTrapsBtn.innerHTML = reportTrapsRevealed
+            ? `<i class="fa-solid fa-rotate-left"></i> Đặt lại câu gài`
+            : `<i class="fa-solid fa-eye"></i> Hiện toàn bộ đáp án`;
+    }
+}
+
+// --- Gán sự kiện điều hướng ---
+if (launchQuizBtn) {
+    launchQuizBtn.addEventListener("click", () => {
+        SoundEngine.playClick();
+        showScreen(quizScreen);
+        renderStandaloneQuiz();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+}
+
+if (quizBackHomeBtn) {
+    quizBackHomeBtn.addEventListener("click", () => {
+        SoundEngine.playClick();
+        showScreen(welcomeScreen);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+}
+
+if (quizResetBtn) {
+    quizResetBtn.addEventListener("click", resetStandaloneQuiz);
+}
+
+if (toggleQuizAnswersBtn) {
+    toggleQuizAnswersBtn.addEventListener("click", toggleAllStandaloneAnswers);
+}
+
+if (quizSwitchChatBtn) {
+    quizSwitchChatBtn.addEventListener("click", () => {
+        SoundEngine.playClick();
+        showScreen(welcomeScreen);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+}
+
+if (toggleTrapsBtn) {
+    toggleTrapsBtn.addEventListener("click", toggleAllReportAnswers);
+}
+
+// Khởi tạo sẵn khi tải trang
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+        renderTrapQuiz();
+        renderStandaloneQuiz();
+    });
+} else {
+    renderTrapQuiz();
+    renderStandaloneQuiz();
 }
